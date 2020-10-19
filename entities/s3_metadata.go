@@ -78,9 +78,7 @@ func (record *S3Metadata) Insert() (*S3Metadata, error) {
 func (record *S3Metadata) Delete() bool {
 	sql := fmt.Sprintf(`DELETE FROM s3_metadata WHERE id = %d`, &record.ID)
 
-	res, err := db.Exec(sql)
-
-	fmt.Printf("%v", res)
+	_, err := db.Exec(sql)
 
 	return err == nil
 }
