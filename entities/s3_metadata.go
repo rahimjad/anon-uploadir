@@ -10,18 +10,16 @@ import (
 
 // S3Metadata contains data from the s3_metadata table
 type S3Metadata struct {
-	ID            string `db:"id"`
-	FileName      string `db:"file_name"`
-	FileExtension string `db:"file_ext"`
-	Location      string `db:"location"`
-	FileSize      int    `db:"file_size"`
-	CreatedAt     int    `db:"created_at"`
-	UpdatedAt     int    `db:"updated_at"`
+	ID        string `db:"id"`
+	FileName  string `db:"file_name"`
+	FileSize  int64  `db:"file_size"`
+	CreatedAt int    `db:"created_at"`
+	UpdatedAt int    `db:"updated_at"`
 }
 
 func (record *S3Metadata) QueryRow(id string) {
 	sql := fmt.Sprintf(`
-		SELECT *
+		SELECT id, file_name, file_size, created_at, updated_at
 		FROM s3_metadata
 		WHERE id = '%s'
 		LIMIT 1
@@ -32,8 +30,6 @@ func (record *S3Metadata) QueryRow(id string) {
 	err := row.Scan(
 		&record.ID,
 		&record.FileName,
-		&record.FileExtension,
-		&record.Location,
 		&record.FileSize,
 		&record.CreatedAt,
 		&record.UpdatedAt,
@@ -59,16 +55,16 @@ func (record *S3Metadata) Insert() (*S3Metadata, error) {
 	}
 
 	sql := fmt.Sprintf(`
-		INSERT INTO s3_metadata (id, file_name, file_ext, file_size, location, created_at, updated_at)
-		VALUES ('%s', '%s', '%s', %d, '%s', %d, %d);`,
+		INSERT INTO s3_metadata (id, file_name, file_size, created_at, updated_at)
+		VALUES ('%s', '%s', %d, %d, %d);`,
 		record.ID,
 		record.FileName,
-		record.FileExtension,
 		record.FileSize,
-		record.Location,
 		record.CreatedAt,
 		record.UpdatedAt,
 	)
+
+	fmt.Println(sql)
 
 	_, err := db.Exec(sql)
 
@@ -76,7 +72,7 @@ func (record *S3Metadata) Insert() (*S3Metadata, error) {
 }
 
 func (record *S3Metadata) Delete() bool {
-	sql := fmt.Sprintf(`DELETE FROM s3_metadata WHERE id = %d`, &record.ID)
+	sql := fmt.Sprintf(`DELETE FROM s3_metadata WHERE id = %s`, record.ID)
 
 	_, err := db.Exec(sql)
 

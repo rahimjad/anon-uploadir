@@ -2,9 +2,9 @@ package db
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"os/exec"
+	"strings"
 
 	"../config"
 
@@ -63,7 +63,7 @@ func Query(sql string) (*sql.Rows, error) {
 func Migrate() (sql.Result, error) {
 	return Exec(`
 		CREATE TABLE IF NOT EXISTS s3_metadata (
-			id         varchar(255),
+			id         uuid,
 			file_name  varchar(255),
 			file_ext   varchar(255),
 			location   text,
@@ -82,5 +82,6 @@ func Rollback() (sql.Result, error) {
 // GenerateUUID is used to generate the ID value
 func GenerateUUID() string {
 	uuid, _ := exec.Command("uuidgen").Output()
-	return fmt.Sprintf("%s", uuid)
+	lowerUUID := strings.ToLower(string(uuid))
+	return strings.TrimSpace(lowerUUID)
 }

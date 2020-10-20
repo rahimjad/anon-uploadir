@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	// db.Rollback()
 	_, err := db.Migrate()
 
 	if err != nil {
