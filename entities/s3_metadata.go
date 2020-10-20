@@ -2,7 +2,6 @@ package entities
 
 import (
 	"fmt"
-	"log"
 	"time"
 
 	"../db"
@@ -17,7 +16,7 @@ type S3Metadata struct {
 	UpdatedAt int    `db:"updated_at"`
 }
 
-func (record *S3Metadata) QueryRow(id string) {
+func (record *S3Metadata) QueryRow(id string) error {
 	sql := fmt.Sprintf(`
 		SELECT id, file_name, file_size, created_at, updated_at
 		FROM s3_metadata
@@ -35,13 +34,7 @@ func (record *S3Metadata) QueryRow(id string) {
 		&record.UpdatedAt,
 	)
 
-	if err != nil {
-		log.Panic(err)
-	}
-
-	if record.ID == "" {
-		panic("Record does not exist")
-	}
+	return err
 }
 
 // Insert will create an s3_metadata record in the DB
@@ -71,12 +64,12 @@ func (record *S3Metadata) Insert() (*S3Metadata, error) {
 	return record, err
 }
 
-func (record *S3Metadata) Delete() bool {
+func (record *S3Metadata) Delete() error {
 	sql := fmt.Sprintf(`DELETE FROM s3_metadata WHERE id = %s`, record.ID)
 
 	_, err := db.Exec(sql)
 
-	return err == nil
+	return err
 }
 
 func (record *S3Metadata) CountRecords() int {

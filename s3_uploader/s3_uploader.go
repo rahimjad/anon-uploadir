@@ -34,6 +34,8 @@ func ConnectAws() *session.Session {
 	return sess
 }
 
+// UploadFile takes a key and file and uploads to s3 - this is an unoptimised implememtation
+// that will upload the entire file, we could update this to upload in chunks
 func UploadFile(key string, file io.Reader) (*s3manager.UploadOutput, error) {
 	sess := ConnectAws()
 	conf := config.New().AWS
@@ -50,6 +52,8 @@ func UploadFile(key string, file io.Reader) (*s3manager.UploadOutput, error) {
 	return up, err
 }
 
+// DownloadFile takes a key and downloads the file from s3 - this is an unoptimised implememtation
+// that will dowload the entire file, we could update this to dowload in chunks
 func DownloadFile(filename string) (*os.File, error) {
 	sess := ConnectAws()
 	conf := config.New().AWS

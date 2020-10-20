@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"../entities"
 	"../s3_uploader"
@@ -42,9 +43,19 @@ func UploadFile(c *gin.Context) {
 func DownloadFile(c *gin.Context) {
 	id := c.Param("id")
 	s3Metadata := entities.S3Metadata{}
-	s3Metadata.QueryRow(id)
+	err := s3Metadata.QueryRow(id)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "File Not Found!",
+		})
+		return
+	}
 
 	f, err := s3_uploader.DownloadFile(s3Metadata.ID)
+
+	// Delete the file once it has been rendered
+	defer os.Remove(f.Name())
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
