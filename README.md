@@ -14,9 +14,9 @@
 ---
 ## Steps to get the Client running locally:
 
-I chose to use [react-boilerplate](https://github.com/react-boilerplate/react-boilerplate) for the client. Mostly because I have not tried it before and I've heard good things about the dev experience. Start up instructions as per the original README below:
+I chose to use [create-react-app](https://reactjs.org/docs/create-a-new-react-app.html) for the client. Mostly because it is fairly lightweight and easy to get going. Feel free to look at the client README for more info.
 
 1.  Make sure that you have Node.js v8.15.1 and npm v5 or above installed.
-1.  Run `npm run setup` in order to install dependencies and clean the git repo.
+1.  Run `npm install` in order to install dependencies and clean the git repo.
 1.  Run `npm start` to get the server going
 1.  Navigate to `http://localhost:3000` to get going!
