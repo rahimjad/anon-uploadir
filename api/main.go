@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"./api"
 	"./db"
+	"./routes"
 )
 
 func main() {
@@ -15,5 +15,5 @@ func main() {
 		log.Panic(err)
 	}
 
-	api.Run()
+	routes.Run()
 }
