@@ -1,5 +1,6 @@
 # Don't unintentionally commit AWS keys
 api/config/*.yml
+api/.DS_Store
 
 # Don't check auto-generated stuff into git
 client/coverage
@@ -11,3 +12,6 @@ client/stats.json
 client/.DS_Store
 client/npm-debug.log
 client/.idea
+
+# Root Folder
+.DS_Store
