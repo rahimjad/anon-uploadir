@@ -14,8 +14,9 @@ import (
 
 // Config is a struct used to capture configuration values from the yml file provided
 type Config struct {
-	DB  DbConfig  `yaml:"db"`
-	AWS AwsConfig `yaml:"aws"`
+	DB     DbConfig     `yaml:"db"`
+	AWS    AwsConfig    `yaml:"aws"`
+	Router RouterConfig `yaml:"router"`
 }
 
 func getConfigFromDir(env string) ([]byte, error) {
@@ -64,9 +65,12 @@ func New() Config {
 		env = "development"
 	}
 
+	// Attempt to load the config file using current directory
+	// This will fail when running the code from an executable file
 	yamlFile, err := getConfigFromDir(env)
 
 	if yamlFile == nil {
+		// Handles loading configuration when code is running from executable
 		yamlFile, err = getConfigFromExecutable(env)
 	}
 

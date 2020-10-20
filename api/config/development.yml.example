@@ -10,3 +10,5 @@ aws:
   access_key_id: "SOME_ACCESS_KEY"
   secret_access_key: "SOME_SECRET_KEY"
   bucket_name: "anon-upload"
+router:
+  port: 8080

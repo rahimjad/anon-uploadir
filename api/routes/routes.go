@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"../config"
 	"../entities"
 	"../s3_uploader"
 	"github.com/gin-gonic/gin"
@@ -68,10 +69,11 @@ func DownloadFile(c *gin.Context) {
 }
 
 func Run() {
+	config := config.New().Router
 	router := gin.Default()
 
 	router.POST("/file", UploadFile)
 	router.GET("/file/:id", DownloadFile)
 
-	router.Run(":8080")
+	router.Run(fmt.Sprintf(":%d", config.Port))
 }
