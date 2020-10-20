@@ -1,1 +1,13 @@
+# Don't unintentionally commit AWS keys
 api/config/*.yml
+
+# Don't check auto-generated stuff into git
+client/coverage
+client/build
+client/node_modules
+client/stats.json
+
+# Cruft
+client/.DS_Store
+client/npm-debug.log
+client/.idea

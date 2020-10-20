@@ -38,7 +38,10 @@ func UploadFile(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Successfully Uploaded File"})
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Successfully Uploaded File",
+		"fileId":  s3Metadata.ID,
+	})
 }
 
 func DownloadFile(c *gin.Context) {

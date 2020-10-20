@@ -12,3 +12,11 @@
 1. API code will be served on `localhost:8080` (unless you change ports in the YAML)
 
 ---
+## Steps to get the Client running locally:
+
+I chose to use [react-boilerplate](https://github.com/react-boilerplate/react-boilerplate) for the client. Mostly because I have not tried it before and I've heard good things about the dev experience. Start up instructions as per the original README below:
+
+1.  Make sure that you have Node.js v8.15.1 and npm v5 or above installed.
+1.  Run `npm run setup` in order to install dependencies and clean the git repo.
+1.  Run `npm start` to get the server going
+1.  Navigate to `http://localhost:3000` to get going!
