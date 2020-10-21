@@ -57,8 +57,6 @@ func (record *S3Metadata) Insert() (*S3Metadata, error) {
 		record.UpdatedAt,
 	)
 
-	fmt.Println(sql)
-
 	_, err := db.Exec(sql)
 
 	return record, err
