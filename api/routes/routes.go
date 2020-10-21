@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"../config"
 	"../entities"
 	"../s3_uploader"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -74,7 +76,13 @@ func DownloadFile(c *gin.Context) {
 func Run() {
 	config := config.New().Router
 	router := gin.Default()
-
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:  []string{"http://localhost:3000"},
+		AllowMethods:  []string{"POST", "GET"},
+		AllowHeaders:  []string{"Origin"},
+		ExposeHeaders: []string{"Content-Length"},
+		MaxAge:        12 * time.Hour,
+	}))
 	router.POST("/file", UploadFile)
 	router.GET("/file/:id", DownloadFile)
 
