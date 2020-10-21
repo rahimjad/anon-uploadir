@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import FileUploader from './FileUploader/FileUploader'
-import { Button, LinearProgress } from '@material-ui/core'
+import { Button, LinearProgress, Link } from '@material-ui/core'
 
 const StyledContentWrapper =  styled.div`
   margin: 0;
@@ -20,6 +20,17 @@ const StyledImage = styled.img`
 
 const StyledForm = styled.form`
   margin-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const StyledLinearProgress = styled(LinearProgress)`
+  margin-top: 50px;
+`
+
+const StyledLink = styled(Link)`
+  margin-top: 50px !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -82,10 +93,12 @@ const App = () => {
           }
         </StyledForm>
         { isLoading &&    
-          (<LinearProgress color="secondary" />)
+          (<StyledLinearProgress color="secondary" />)
         }
         { linkToFile && 
-          (<a href={linkToFile}>Click here to access your file</a>)
+          <StyledLink href={linkToFile}>
+            Click here to access your file...
+          </StyledLink>
         }
       </StyledContentWrapper>
     </div>
