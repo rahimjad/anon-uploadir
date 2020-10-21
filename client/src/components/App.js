@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import FileUploader from './FileUploader/FileUploader'
-import { Button } from '@material-ui/core'
+import { Button, LinearProgress } from '@material-ui/core'
 
 const App = () => {
   const [selectedFile, setSelectedFile] = useState(null)
@@ -43,10 +43,13 @@ const App = () => {
       <form>
         <FileUploader
           onFileSelect={(file) => setSelectedFile(file)}
-          disabled={isLoading || selectedFile !== null}
+          disabled={isLoading}
         />
         <Button onClick={submitForm} disabled={isLoading}>Upload File</Button>
       </form>
+      { isLoading &&    
+        (<LinearProgress color="secondary" />)
+      }
       { linkToFile && 
         (<a href={linkToFile}>Click here to access your file</a>)
       }
