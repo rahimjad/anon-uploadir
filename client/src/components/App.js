@@ -1,6 +1,29 @@
-import React, { useState } from "react"
+import React, { useState } from 'react'
+import styled from 'styled-components'
 import FileUploader from './FileUploader/FileUploader'
 import { Button, LinearProgress } from '@material-ui/core'
+
+const StyledContentWrapper =  styled.div`
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+`
+const StyledImage = styled.img`
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 800px;
+`
+
+const StyledForm = styled.form`
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
 
 const App = () => {
   const [selectedFile, setSelectedFile] = useState(null)
@@ -40,19 +63,31 @@ const App = () => {
   
   return (
     <div className="App">
-      <form>
-        <FileUploader
-          onFileSelect={(file) => setSelectedFile(file)}
-          disabled={isLoading}
-        />
-        <Button onClick={submitForm} disabled={isLoading}>Upload File</Button>
-      </form>
-      { isLoading &&    
-        (<LinearProgress color="secondary" />)
-      }
-      { linkToFile && 
-        (<a href={linkToFile}>Click here to access your file</a>)
-      }
+      <StyledContentWrapper>
+        <StyledImage src="/title.png"/>
+        <StyledForm>
+          <FileUploader
+            onFileSelect={(file) => setSelectedFile(file)}
+            disabled={isLoading}
+          />
+          { selectedFile && 
+            (<Button 
+                size="medium" 
+                onClick={submitForm} 
+                disabled={isLoading} 
+                color="secondary">
+                  Submit To The Interwebs
+              </Button>
+            )
+          }
+        </StyledForm>
+        { isLoading &&    
+          (<LinearProgress color="secondary" />)
+        }
+        { linkToFile && 
+          (<a href={linkToFile}>Click here to access your file</a>)
+        }
+      </StyledContentWrapper>
     </div>
   )
 }

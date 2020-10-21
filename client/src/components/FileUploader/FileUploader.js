@@ -21,14 +21,14 @@ const FileUploader = ({ onFileSelect, disabled }) => {
 
       <Fab
           color="secondary"
-          size="small"
+          size="medium"
           component="span"
           aria-label="add"
           variant="extended"
           onClick={e => fileInput.current && fileInput.current.click()} 
           disabled={disabled}
       >
-          Select File
+          Upload File
       </Fab>
     </label>
   )
