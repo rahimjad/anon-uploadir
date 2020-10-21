@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import FileUploader from './FileUploader/FileUploader'
-import { Button, LinearProgress, Link } from '@material-ui/core'
+import SuccessModal from './SuccessModal/SuccessModal'
+import ErrorModal from './ErrorModal/ErrorModal'
+import { Button, LinearProgress } from '@material-ui/core'
 
 const StyledContentWrapper =  styled.div`
   margin: 0;
@@ -29,30 +31,53 @@ const StyledLinearProgress = styled(LinearProgress)`
   margin-top: 50px;
 `
 
-const StyledLink = styled(Link)`
-  margin-top: 50px !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const StyledFileName = styled.p`
+  margin-top: 30px;
+  color: white;
+  text-align: center;
 `
 
 const App = () => {
   const [selectedFile, setSelectedFile] = useState(null)
   const [linkToFile, setLinkToFile] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [showErrorModal, setShowErrorModal] = useState(false)
   
-  const handleSuccess = async res => {
-    setSelectedFile(null)
-    setIsLoading(false)
-
+  const handleResponse = async res => {
     const json = await res.json()
 
-    setLinkToFile(`http://localhost:8080/file/${json.fileId}`)
+    if (res.status === 200) {
+      handleSuccess(json.fileId)
+    } else {
+      handleError(json.error)
+    }
+  }
+
+  const handleSuccess = fileId => {
+    setIsLoading(false)
+    setSelectedFile(null)
+
+    setLinkToFile(`http://localhost:8080/file/${fileId}`)
+
+    setShowSuccessModal(true)
+  }
+  
+  const handleError = (errorMessage=null) => {
+    setIsLoading(false)
+
+    if (errorMessage) {
+      setErrorMessage(errorMessage)
+    } else {
+      setErrorMessage('Whoops! Something went wrong when uploading your file.')
+    }
+    setShowErrorModal(true)
   }
 
   const submitForm = e => {
     if (selectedFile === null) { return } 
-  
+
     e.preventDefault()
     setIsLoading(true)
 
@@ -61,14 +86,13 @@ const App = () => {
 
     fetch('http://localhost:8080/file', {
       method: 'POST',
-      body: formData,
-      timeout: 100000
+      body: formData
     })
       .then((res) => {
-        handleSuccess(res)
+        handleResponse(res)
       })
       .catch((err) => {
-        alert('Something is wrong')
+        handleError()
       })
   };
   
@@ -86,20 +110,29 @@ const App = () => {
                 size="medium" 
                 onClick={submitForm} 
                 disabled={isLoading} 
-                color="secondary">
+                color="secondary"
+              >
                   Submit To The Interwebs
               </Button>
             )
           }
         </StyledForm>
+        { selectedFile &&
+          (<StyledFileName>{isLoading ? 'Uploading' : 'Ready to upload'}: "{selectedFile.name}"</StyledFileName>)
+        }
         { isLoading &&    
           (<StyledLinearProgress color="secondary" />)
         }
-        { linkToFile && 
-          <StyledLink href={linkToFile}>
-            Click here to access your file...
-          </StyledLink>
-        }
+        <SuccessModal 
+          open={showSuccessModal}
+          handleClose={() => setShowSuccessModal(false)}
+          fileLink={linkToFile}
+        />  
+        <ErrorModal 
+          open={showErrorModal}
+          handleClose={() => setShowErrorModal(false)}
+          errorMessage={errorMessage}
+        />  
       </StyledContentWrapper>
     </div>
   )
